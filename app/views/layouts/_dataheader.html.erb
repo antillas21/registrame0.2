@@ -4,5 +4,5 @@
 	<%= link_to '<span class="user icon"></span>Attendees'.html_safe, data_people_path, :class => 'big middle pill button' %>
   <%= link_to '<span class="home icon"></span>Companies'.html_safe, data_companies_path, :class => 'big middle pill button' %>
   <%= link_to '<span class="book icon"></span>Dashboard'.html_safe, data_root_path, :class => 'big middle pill button' %>
-	<%= link_to "Log out", destroy_user_session_path, :class => 'big right pill button' %>
+	<%= link_to "Log out", destroy_user_session_path, :method => :delete, :class => 'big right pill button' %>
 	</div>

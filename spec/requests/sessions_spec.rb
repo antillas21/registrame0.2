@@ -18,4 +18,13 @@ describe "Sessions", :type => :request do
 
     expect(response.body).to include("Signed in successfully")
   end
+
+  it "signs out with a delete request" do
+    sign_in_as(create_user(:username => "ada", :email => "ada@example.com"))
+
+    delete "/users/sign_out"
+    follow_redirect!
+
+    expect(response.body).to include("Signed out successfully")
+  end
 end
