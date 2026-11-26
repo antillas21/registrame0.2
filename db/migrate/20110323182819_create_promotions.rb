@@ -1,5 +1,5 @@
-class CreatePromotions < ActiveRecord::Migration
-  def self.up
+class CreatePromotions < ActiveRecord::Migration[4.2]
+  def up
     create_table :promotions do |t|
       t.string :name
 
@@ -7,7 +7,7 @@ class CreatePromotions < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
     drop_table :promotions
   end
 end

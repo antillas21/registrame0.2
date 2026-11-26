@@ -4,7 +4,7 @@ Event registration for an expo or trade show. The app has three areas: admin con
 
 ## Setup
 
-Local development runs in Docker Compose. The web container is `ruby:2.4.10` (`platform: linux/amd64`, because that Ruby image has no arm64 build). The database container is `postgres:18-alpine`.
+Local development runs in Docker Compose. The web container is `ruby:2.6.10`. The database container is `postgres:18-alpine`. Dev connections use `scram-sha-256`.
 
 ```sh
 docker compose up --build
@@ -41,24 +41,30 @@ A name badge PDF is rendered when a signed-in user requests `/data/people/:id.pd
 
 | | |
 | --- | --- |
-| Ruby | 2.4.10 |
-| Rails | 4.2.11.3 |
+| Ruby | 2.6.10 |
+| Rails | 5.2.8.1 |
 | PostgreSQL | 18 |
-| Devise | `~> 3.5.10` |
+| Devise | `~> 4.7.0` |
 | Formtastic | `~> 3.1.0` |
-| client_side_validations | `~> 4.2.0` |
-| acts_as_api | `~> 1.0.0` |
-| Prawn | `~> 1.3.0` |
+| Prawn | `~> 2.4` |
 | rqrcode | `~> 0.10.1` |
 | chunky_png | `~> 1.3.0` |
-| pg | `~> 0.21.0` |
-| rspec-rails | `~> 3.5.2` |
+| pg | `~> 1.1` |
+| bootsnap | `>= 1.1.0` |
+| rspec-rails | `~> 3.8.0` |
 | jquery-rails | `~> 4.3.1` |
 | sass-rails | `~> 5.0.6` |
+| ffi | `1.15.5` |
 
-Search uses `ILIKE` so company and attendee name search stays case-insensitive on Postgres. `protected_attributes` is not installed. Create and update actions permit their own parameters.
+Search uses `ILIKE` so company and attendee name search stays case-insensitive on Postgres. Create and update actions permit their own parameters. `client_side_validations` and `acts_as_api` are gone. Data JSON is built in the models.
 
 ## Decisions
+
+### 2026-11-25 — `upgrade/rails-5-2` — Rails 5.2.8.1 / Ruby 2.6.10
+
+`config.load_defaults` is 5.0 first, then 5.2. Both groups boot and the suite stays green. Models inherit `ApplicationRecord`. Migrations inherit `ActiveRecord::Migration[4.2]` and use instance `up` / `down`. `belongs_to` is required, so a person's company and a company's state, country, and sector are `optional: true`. Registration stays required.
+
+Devise is 4.7 and permits parameters with `permit`. Prawn is 2.x. `pg` is 1.x, so the amd64 pin is gone and Postgres dev auth is `scram-sha-256`. `client_side_validations` is removed, and the forms no longer pass `:validate`. `render_for_api` is replaced by `api_record` / `as_json`, keeping `first_name`, `last_name`, `registration_type`, company `name` / `city` / `state` / `country`, and the `people` and `companies` roots. Request specs pass parameters with the `params:` keyword. `ffi` stays at 1.15.5 because 1.16 does not install on Ruby 2.6.
 
 ### 2026-11-25 — `upgrade/rails-4-2` — Rails 4.2.11.3 / Ruby 2.4.10
 

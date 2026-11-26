@@ -1,5 +1,5 @@
-class CreateInterestsAndPeopleRelationship < ActiveRecord::Migration
-  def self.up
+class CreateInterestsAndPeopleRelationship < ActiveRecord::Migration[4.2]
+  def up
     create_table :interests_people, :id => false do |t|
       t.integer :person_id
       t.integer :interest_id
@@ -9,7 +9,7 @@ class CreateInterestsAndPeopleRelationship < ActiveRecord::Migration
     add_index :interests_people, :interest_id
   end
 
-  def self.down
+  def down
     drop_table :interests_people
   end
 end

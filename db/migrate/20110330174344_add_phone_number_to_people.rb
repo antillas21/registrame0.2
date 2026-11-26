@@ -1,9 +1,9 @@
-class AddPhoneNumberToPeople < ActiveRecord::Migration
-  def self.up
+class AddPhoneNumberToPeople < ActiveRecord::Migration[4.2]
+  def up
     add_column :people, :phone, :string
   end
 
-  def self.down
+  def down
     remove_column :people, :phone
   end
 end

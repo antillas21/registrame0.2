@@ -1,5 +1,5 @@
-class CreateNameBadges < ActiveRecord::Migration
-  def self.up
+class CreateNameBadges < ActiveRecord::Migration[4.2]
+  def up
     create_table :name_badges do |t|
       t.string :name
       t.float :width
@@ -14,7 +14,7 @@ class CreateNameBadges < ActiveRecord::Migration
     add_index :name_badges, :name
   end
 
-  def self.down
+  def down
     drop_table :name_badges
   end
 end

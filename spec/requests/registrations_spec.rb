@@ -8,14 +8,14 @@ describe "Public registration", :type => :request do
   it "creates an attendee and sends a confirmation" do
     registration = create_registration("Visitor")
 
-    post "/people", :person => {
-      :fname => "John",
-      :lname => "Doe",
-      :email => "john@example.com",
-      :phone => "(415) 555-1212",
-      :registration_id => registration.id,
-      :company_name => "Acme"
-    }
+    post "/people", params: { person: {
+      fname: "John",
+      lname: "Doe",
+      email: "john@example.com",
+      phone: "(415) 555-1212",
+      registration_id: registration.id,
+      company_name: "Acme"
+    } }
 
     person = Person.find_by(email: "john@example.com")
     expect(person).to be_present
@@ -25,7 +25,7 @@ describe "Public registration", :type => :request do
   end
 
   it "renders the form again when the attendee is invalid" do
-    post "/people", :person => { :fname => "John" }
+    post "/people", params: { person: { fname: "John" } }
 
     expect(response.status).to eq(200)
     expect(Person.count).to eq(0)

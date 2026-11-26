@@ -1,5 +1,5 @@
-class CreateCountries < ActiveRecord::Migration
-  def self.up
+class CreateCountries < ActiveRecord::Migration[4.2]
+  def up
     create_table :countries do |t|
       t.string :name, :index => true
 
@@ -7,7 +7,7 @@ class CreateCountries < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
     drop_table :countries
   end
 end

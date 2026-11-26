@@ -5,8 +5,8 @@ class Data::PeopleController < Data::BaseController
     @people = Person.all
     respond_to do |format|
       format.html
-      format.xml { render_for_api :complete_record, :xml => @people, :root => :people }
-      format.json { render_for_api :complete_record, :json => @people, :root => :people }
+      format.xml { render xml: @people.map(&:api_record), root: "people" }
+      format.json { render json: { people: @people.map(&:api_record) } }
     end
   end
 
@@ -31,8 +31,8 @@ class Data::PeopleController < Data::BaseController
   def show
     respond_to do |format|
       format.html
-      format.xml { render_for_api :complete_record, :xml => @person }
-      format.json { render_for_api :complete_record, :json => @person }
+      format.xml { render xml: @person.api_record }
+      format.json { render json: @person.api_record }
       format.pdf do
         mark_printed(@person)
         send_badge(@person)

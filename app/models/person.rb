@@ -1,4 +1,4 @@
-class Person < ActiveRecord::Base
+class Person < ApplicationRecord
   before_validation :strip_quotes
   validates_presence_of :fname, :lname, :email, :phone, :registration
   validates_uniqueness_of :email, :case_sensitive => false
@@ -9,19 +9,20 @@ class Person < ActiveRecord::Base
   has_and_belongs_to_many :interests
   has_and_belongs_to_many :promotions
   belongs_to :registration
-  belongs_to :company
+  belongs_to :company, optional: true
   accepts_nested_attributes_for :company
 
-  acts_as_api
-  api_accessible :complete_record do |template|
-    template.add :fname, :as => :first_name
-    template.add :lname, :as => :last_name
-    template.add :email
-    template.add :job
-    template.add :company_name, :as => :company
-    template.add :registration_name, :as => :registration_type
-    template.add :interests
-    template.add :promotions
+  def api_record
+    {
+      "first_name" => fname,
+      "last_name" => lname,
+      "email" => email,
+      "job" => job,
+      "company" => company_name,
+      "registration_type" => registration_name,
+      "interests" => interests.map { |interest| { "name" => interest.name } },
+      "promotions" => promotions.map { |promotion| { "name" => promotion.name } }
+    }
   end
 
   scope :attended, lambda { where("printed = ?", true) }

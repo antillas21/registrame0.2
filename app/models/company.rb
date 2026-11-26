@@ -1,19 +1,20 @@
-class Company < ActiveRecord::Base
+class Company < ApplicationRecord
   validates_presence_of :name
-  belongs_to :state
-  belongs_to :country
-  belongs_to :sector
+  belongs_to :state, optional: true
+  belongs_to :country, optional: true
+  belongs_to :sector, optional: true
   has_many :people, :dependent => :destroy
   before_validation :strip_quotes
 
   default_scope { order('name asc') }
 
-  acts_as_api
-  api_accessible :name_only do |template|
-    template.add :name
-    template.add :city
-    template.add :state_name, :as => :state
-    template.add :country_name, :as => :country
+  def api_record
+    {
+      "name" => name,
+      "city" => city,
+      "state" => state_name,
+      "country" => country_name
+    }
   end
 
   delegate :name, :to => :country, :prefix => true

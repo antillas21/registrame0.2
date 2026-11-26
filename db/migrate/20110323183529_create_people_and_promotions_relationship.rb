@@ -1,5 +1,5 @@
-class CreatePeopleAndPromotionsRelationship < ActiveRecord::Migration
-  def self.up
+class CreatePeopleAndPromotionsRelationship < ActiveRecord::Migration[4.2]
+  def up
     create_table :people_promotions, :id => false do |t|
       t.integer :person_id
       t.integer :promotion_id
@@ -8,7 +8,7 @@ class CreatePeopleAndPromotionsRelationship < ActiveRecord::Migration
     add_index :people_promotions, :promotion_id
   end
 
-  def self.down
+  def down
     drop_table :people_promotions
   end
 end

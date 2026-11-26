@@ -1,5 +1,5 @@
-class CreateInterests < ActiveRecord::Migration
-  def self.up
+class CreateInterests < ActiveRecord::Migration[4.2]
+  def up
     create_table :interests do |t|
       t.string :name
 
@@ -7,7 +7,7 @@ class CreateInterests < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
     drop_table :interests
   end
 end

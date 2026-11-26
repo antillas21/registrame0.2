@@ -1,5 +1,5 @@
-class CreateRegistrations < ActiveRecord::Migration
-  def self.up
+class CreateRegistrations < ActiveRecord::Migration[4.2]
+  def up
     create_table :registrations do |t|
       t.string :name
 
@@ -7,7 +7,7 @@ class CreateRegistrations < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
     drop_table :registrations
   end
 end

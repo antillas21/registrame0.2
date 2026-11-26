@@ -5,8 +5,8 @@ class Admin::InterestsController < Admin::BaseController
     @interests = Interest.all
     respond_to do |format|
       format.html
-      format.xml { render_for_api :complete_record, :xml => @interests, :root => :interests }
-      format.json { render_for_api :complete_record, :json => @interests, :root => :interests }
+      format.xml { render xml: @interests.as_json(only: :name), root: "interests" }
+      format.json { render json: { interests: @interests.as_json(only: :name) } }
     end
   end
 

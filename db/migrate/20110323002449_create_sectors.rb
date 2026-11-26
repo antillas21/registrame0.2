@@ -1,5 +1,5 @@
-class CreateSectors < ActiveRecord::Migration
-  def self.up
+class CreateSectors < ActiveRecord::Migration[4.2]
+  def up
     create_table :sectors do |t|
       t.string :name
 
@@ -8,7 +8,7 @@ class CreateSectors < ActiveRecord::Migration
     add_index :sectors, :name, :unique => true
   end
 
-  def self.down
+  def down
     drop_table :sectors
   end
 end

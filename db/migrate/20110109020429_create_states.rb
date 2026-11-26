@@ -1,5 +1,5 @@
-class CreateStates < ActiveRecord::Migration
-  def self.up
+class CreateStates < ActiveRecord::Migration[4.2]
+  def up
     create_table :states do |t|
       t.string :name
 
@@ -8,7 +8,7 @@ class CreateStates < ActiveRecord::Migration
     add_index :states, :name
   end
 
-  def self.down
+  def down
     drop_table :states
   end
 end

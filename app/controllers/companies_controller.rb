@@ -5,8 +5,8 @@ class CompaniesController < ApplicationController
     @companies = Company.where('name ILIKE ?', "%#{params[:search]}%")
     respond_to do |format|
       format.html
-      format.xml { render_for_api :name_only, :xml => @companies, :root => :companies }
-      format.json { render_for_api :name_only, :json => @companies, :root => :companies }
+      format.xml { render xml: @companies.map(&:api_record), root: "companies" }
+      format.json { render json: { companies: @companies.map(&:api_record) } }
     end
   end
 
@@ -27,8 +27,8 @@ class CompaniesController < ApplicationController
   #def show
    # respond_to do |format|
     #  format.html
-    #  format.xml { render_for_api :name_only, :xml => @company }
-    #  format.json { render_for_api :name_only, :json => @company }
+    #  format.xml { render xml: @company.api_record }
+    #  format.json { render json: @company.api_record }
     #end
   #end
 

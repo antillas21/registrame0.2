@@ -5,8 +5,8 @@ class Admin::EventsController < Admin::BaseController
     @events = Event.all
     respond_to do |format|
       format.html
-      format.xml { render_for_api :complete_record, :xml => @events, :root => :events }
-      format.json { render_for_api :complete_record, :json => @events, :root => :events }
+      format.xml { render xml: @events, root: "events" }
+      format.json { render json: { events: @events } }
     end
   end
 

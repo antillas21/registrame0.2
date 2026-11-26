@@ -5,12 +5,11 @@ services:
       POSTGRES_USER: registrame
       POSTGRES_PASSWORD: registrame
       POSTGRES_DB: registrame_development
-      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
     volumes:
       - pgdata:/var/lib/postgresql
   web:
     build: .
-    platform: linux/amd64
     volumes:
       - .:/app
     ports:

@@ -5,8 +5,8 @@ class Admin::PromotionsController < Admin::BaseController
     @promotions = Promotion.all
     respond_to do |format|
       format.html
-      format.xml { render_for_api :complete_record, :xml => @promotions, :root => :promotions }
-      format.json { render_for_api :complete_record, :json => @promotions, :root => :promotions }
+      format.xml { render xml: @promotions.as_json(only: :name), root: "promotions" }
+      format.json { render json: { promotions: @promotions.as_json(only: :name) } }
     end
   end
 

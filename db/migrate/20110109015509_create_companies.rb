@@ -1,5 +1,5 @@
-class CreateCompanies < ActiveRecord::Migration
-  def self.up
+class CreateCompanies < ActiveRecord::Migration[4.2]
+  def up
     create_table :companies do |t|
       t.string :name
       t.string :address1
@@ -12,7 +12,7 @@ class CreateCompanies < ActiveRecord::Migration
     add_index :companies, :city
   end
 
-  def self.down
+  def down
     drop_table :companies
   end
 end

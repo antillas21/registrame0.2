@@ -8,8 +8,8 @@ Registrame02::Application.configure do
   config.action_mailer.delivery_method = :test
   config.action_mailer.default_url_options = { :host => APP_CONFIG['host'] }
   config.active_support.deprecation = :stderr
-  config.serve_static_files = true
-  config.static_cache_control = "public, max-age=3600"
+  config.public_file_server.enabled = true
+  config.public_file_server.headers = { "Cache-Control" => "public, max-age=3600" }
   config.assets.allow_debugging = true
   config.action_controller.action_on_unpermitted_parameters = :raise
 end

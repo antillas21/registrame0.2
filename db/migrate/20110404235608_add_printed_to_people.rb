@@ -1,10 +1,10 @@
-class AddPrintedToPeople < ActiveRecord::Migration
-  def self.up
+class AddPrintedToPeople < ActiveRecord::Migration[4.2]
+  def up
     add_column :people, :printed, :boolean, :default => false
     add_index :people, :printed
   end
 
-  def self.down
+  def down
     remove_column :people, :printed
   end
 end
