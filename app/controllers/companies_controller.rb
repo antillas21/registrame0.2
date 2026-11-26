@@ -1,5 +1,5 @@
 class CompaniesController < ApplicationController
-  before_filter :find_company, :only => [:show, :edit, :update, :destroy]
+  before_action :find_company, :only => [:show, :edit, :update, :destroy]
 
   def index
     @companies = Company.where('name ILIKE ?', "%#{params[:search]}%")
@@ -15,7 +15,7 @@ class CompaniesController < ApplicationController
   end
 
   def create
-    @company = Company.new(params[:company])
+    @company = Company.new(company_params)
     if @company.save
       redirect_to @company, :notice => "Added new company."
     else
@@ -37,7 +37,7 @@ class CompaniesController < ApplicationController
   end
 
   def update
-    if @company.update_attributes(params[:company])
+    if @company.update_attributes(company_params)
       redirect_to person_path(session[:person_id]), :notice => "Thank you for updating your company record. <strong>This step completes your registration</strong>".html_safe
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
@@ -54,5 +54,9 @@ class CompaniesController < ApplicationController
     def find_company
       @company = Company.find(params[:id])
     end
+    def company_params
+      params.require(:company).permit(
+        :name, :address1, :address2, :city, :state_name, :country_name, :sector_id
+      )
+    end
 end
-

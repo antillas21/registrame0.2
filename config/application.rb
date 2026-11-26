@@ -2,9 +2,7 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-if defined?(Bundler)
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
-end
+Bundler.require(*Rails.groups)
 
 module Registrame02
   class Application < Rails::Application
@@ -13,11 +11,7 @@ module Registrame02
     config.assets.enabled = true
     config.assets.version = '1.0'
     config.assets.initialize_on_precompile = false
-
-    # Rails 3.2 turns mass-assignment protection on in newly generated apps.
-    # These models were written when that protection was off, and strong
-    # parameters arrive with the Rails 4 stop.
-    config.active_record.whitelist_attributes = false
+    config.active_record.raise_in_transactional_callbacks = true
 
     config.autoload_paths += %W(#{config.root}/app/services)
 

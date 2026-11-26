@@ -1,5 +1,5 @@
 class Data::PeopleController < Data::BaseController
-  before_filter :find_person, :only => [:show, :edit, :update, :destroy]
+  before_action :find_person, :only => [:show, :edit, :update, :destroy]
 
   def index
     @people = Person.all
@@ -15,7 +15,7 @@ class Data::PeopleController < Data::BaseController
   end
 
   def create
-    @person = Person.new(params[:person])
+    @person = Person.new(person_params)
     if @person.save
       redirect_to data_person_path(@person), :notice => 'Added a new attendee.'
     else
@@ -41,7 +41,7 @@ class Data::PeopleController < Data::BaseController
   end
 
   def update
-    if @person.update_attributes(params[:person])
+    if @person.update_attributes(person_params)
       redirect_to data_person_path(@person), :notice => "Attendee has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
@@ -57,5 +57,11 @@ class Data::PeopleController < Data::BaseController
   private
     def find_person
       @person = Person.find(params[:id])
+    end
+    def person_params
+      params.require(:person).permit(
+        :fname, :lname, :email, :phone, :job, :company_name, :registration_id,
+        :interest_ids => [], :promotion_ids => []
+      )
     end
 end

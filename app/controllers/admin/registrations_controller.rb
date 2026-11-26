@@ -1,5 +1,5 @@
 class Admin::RegistrationsController < Admin::BaseController
-  before_filter :find_registration, :only => [:show, :edit, :update, :destroy]
+  before_action :find_registration, :only => [:show, :edit, :update, :destroy]
 
   def index
     @registrations = Registration.all
@@ -10,7 +10,7 @@ class Admin::RegistrationsController < Admin::BaseController
   end
 
   def create
-    @registration = Registration.new(params[:registration])
+    @registration = Registration.new(registration_params)
     if @registration.save
       redirect_to admin_registrations_path, :notice => "Added new registration type."
     else
@@ -28,7 +28,7 @@ class Admin::RegistrationsController < Admin::BaseController
   end
 
   def update
-    if @registration.update_attributes(params[:registration])
+    if @registration.update_attributes(registration_params)
       redirect_to admin_registrations_path, :notice => "Registration type has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
@@ -44,5 +44,8 @@ class Admin::RegistrationsController < Admin::BaseController
   private
     def find_registration
       @registration = Registration.find(params[:id])
+    end
+    def registration_params
+      params.require(:registration).permit(:name)
     end
 end

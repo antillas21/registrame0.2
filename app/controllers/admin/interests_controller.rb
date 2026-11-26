@@ -1,5 +1,5 @@
 class Admin::InterestsController < Admin::BaseController
-  before_filter :find_interest, :only => [:show, :edit, :update, :destroy]
+  before_action :find_interest, :only => [:show, :edit, :update, :destroy]
 
   def index
     @interests = Interest.all
@@ -15,7 +15,7 @@ class Admin::InterestsController < Admin::BaseController
   end
 
   def create
-    @interest = Interest.new(params[:interest])
+    @interest = Interest.new(interest_params)
     if @interest.save
       redirect_to admin_interests_path, :notice => "Added new interest."
     else
@@ -33,7 +33,7 @@ class Admin::InterestsController < Admin::BaseController
   end
 
   def update
-    if @interest.update_attributes(params[:interest])
+    if @interest.update_attributes(interest_params)
       redirect_to admin_interests_path, :notice => "Interest has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
@@ -49,5 +49,8 @@ class Admin::InterestsController < Admin::BaseController
   private
     def find_interest
       @interest = Interest.find(params[:id])
+    end
+    def interest_params
+      params.require(:interest).permit(:name)
     end
 end

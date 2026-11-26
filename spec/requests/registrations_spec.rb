@@ -17,7 +17,7 @@ describe "Public registration", :type => :request do
       :company_name => "Acme"
     }
 
-    person = Person.find_by_email("john@example.com")
+    person = Person.find_by(email: "john@example.com")
     expect(person).to be_present
     expect(person.company_name).to eq("Acme")
     expect(ActionMailer::Base.deliveries.size).to eq(1)

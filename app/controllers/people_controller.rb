@@ -1,12 +1,12 @@
 class PeopleController < ApplicationController
-  before_filter :find_person, :only => [:show, :edit, :update, :destroy]
+  before_action :find_person, :only => [:show, :edit, :update, :destroy]
 
   def new
     @person = Person.new
   end
 
   def create
-    @person = Person.new(params[:person])
+    @person = Person.new(person_params)
     if @person.save
       session[:person_id] = @person.id
       if @person.company
@@ -14,7 +14,7 @@ class PeopleController < ApplicationController
       else
         redirect_to @person, :notice => "Thank you. <strong>This step completes your registration</strong>".html_safe
       end
-      PersonMailer.registration_confirmation(@person).deliver
+      PersonMailer.registration_confirmation(@person).deliver_now
     else
       flash[:error] = 'There were some errors. Please correct them before proceeding.'
       render 'new'
@@ -38,7 +38,7 @@ class PeopleController < ApplicationController
   end
 
   def update
-    if @person.update_attributes(params[:person])
+    if @person.update_attributes(person_params)
       redirect_to @person, :notice => "Thank you for updating your record."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
@@ -54,5 +54,12 @@ class PeopleController < ApplicationController
   private
     def find_person
       @person = Person.find(params[:id])
+    end
+
+    def person_params
+      params.require(:person).permit(
+        :fname, :lname, :email, :phone, :job, :company_name, :registration_id,
+        :interest_ids => [], :promotion_ids => []
+      )
     end
 end

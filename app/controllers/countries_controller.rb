@@ -11,9 +11,12 @@ class CountriesController < ApplicationController
   end
 
   def create
-    #@country = Country.new(params[:country])
+    #@country = Country.new(country_params)
     #@country.save
-    @country = Country.create!(params[:country])
+    @country = Country.create!(country_params)
   end
+  private
+    def country_params
+      params.require(:country).permit(:name)
+    end
 end
-

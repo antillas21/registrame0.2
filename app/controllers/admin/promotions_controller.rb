@@ -1,5 +1,5 @@
 class Admin::PromotionsController < Admin::BaseController
-  before_filter :find_promotion, :only => [:show, :edit, :update, :destroy]
+  before_action :find_promotion, :only => [:show, :edit, :update, :destroy]
 
   def index
     @promotions = Promotion.all
@@ -15,7 +15,7 @@ class Admin::PromotionsController < Admin::BaseController
   end
 
   def create
-    @promotion = Promotion.new(params[:promotion])
+    @promotion = Promotion.new(promotion_params)
     if @promotion.save
       redirect_to admin_promotions_path, :notice => "Added new promotion media."
     else
@@ -33,7 +33,7 @@ class Admin::PromotionsController < Admin::BaseController
   end
 
   def update
-    if @promotion.update_attributes(params[:promotion])
+    if @promotion.update_attributes(promotion_params)
       redirect_to admin_promotions_path, :notice => "Promotion media has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
@@ -49,5 +49,8 @@ class Admin::PromotionsController < Admin::BaseController
   private
     def find_promotion
       @promotion = Promotion.find(params[:id])
+    end
+    def promotion_params
+      params.require(:promotion).permit(:name)
     end
 end

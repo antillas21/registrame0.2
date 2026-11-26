@@ -1,5 +1,5 @@
 class Admin::EventsController < Admin::BaseController
-  before_filter :find_event, :only => [:show, :edit, :update]
+  before_action :find_event, :only => [:show, :edit, :update]
 
   def index
     @events = Event.all
@@ -15,7 +15,7 @@ class Admin::EventsController < Admin::BaseController
   end
 
   def create
-    @event = Event.new(params[:event])
+    @event = Event.new(event_params)
     if @event.save
       redirect_to admin_events_path, :notice => "Added new event."
     else
@@ -33,7 +33,7 @@ class Admin::EventsController < Admin::BaseController
   end
 
   def update
-    if @event.update_attributes(params[:event])
+    if @event.update_attributes(event_params)
       redirect_to admin_events_path, :notice => "Event info has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
@@ -44,5 +44,8 @@ class Admin::EventsController < Admin::BaseController
   private
     def find_event
       @event = Event.find(params[:id])
+    end
+    def event_params
+      params.require(:event).permit(:name, :venue, :info, :date, :website)
     end
 end

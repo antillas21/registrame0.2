@@ -6,7 +6,7 @@ class Company < ActiveRecord::Base
   has_many :people, :dependent => :destroy
   before_validation :strip_quotes
 
-  default_scope order('name asc')
+  default_scope { order('name asc') }
 
   acts_as_api
   api_accessible :name_only do |template|
@@ -25,7 +25,7 @@ class Company < ActiveRecord::Base
   end
 
   def state_name=(name)
-    self.state = State.find_or_create_by_name(name) unless name.blank?
+    self.state = State.find_or_create_by(name: name) unless name.blank?
   end
 
   def country_name
@@ -33,7 +33,7 @@ class Company < ActiveRecord::Base
   end
 
   def country_name=(name)
-    self.country = Country.find_or_create_by_name(name) unless name.blank?
+    self.country = Country.find_or_create_by(name: name) unless name.blank?
   end
 
   def sector_name

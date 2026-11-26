@@ -18,10 +18,10 @@ services:
     depends_on:
       - db
     entrypoint: ["bash", "/app/docker/entrypoint.sh"]
-    command: ["bundle", "exec", "rails", "server", "-p", "3000"]
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
     environment:
       POSTGRES_HOST: db
-      SECRET_TOKEN: development-secret-token-change-me-0123456789
+      SECRET_KEY_BASE: development-secret-token-change-me-0123456789
       RAILS_ENV: development
 
 volumes:

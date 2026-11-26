@@ -1,9 +1,9 @@
-FROM ruby:2.3.8
+FROM ruby:2.4.10
 
-# Debian Stretch moved to the archive. The official Ruby 2.3 image still points at the old mirrors.
+# Ruby 2.4.10 is Debian Buster. Those mirrors moved to the archive.
 RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
- && sed -i 's/security.debian.org/archive.debian.org/g' /etc/apt/sources.list \
- && sed -i '/stretch-updates/d' /etc/apt/sources.list \
+ && sed -i 's|security.debian.org/debian-security|archive.debian.org/debian-security|g' /etc/apt/sources.list \
+ && sed -i '/-updates/d' /etc/apt/sources.list \
  && printf 'Acquire::Check-Valid-Until "false";\nAPT::Get::AllowUnauthenticated "true";\n' > /etc/apt/apt.conf.d/99archive \
  && apt-get update \
  && apt-get install -y --allow-unauthenticated --no-install-recommends build-essential libpq-dev postgresql-client \
@@ -22,4 +22,4 @@ RUN chmod +x /usr/local/bin/docker-entrypoint
 
 EXPOSE 3000
 ENTRYPOINT ["docker-entrypoint"]
-CMD ["bundle", "exec", "rails", "server", "-p", "3000"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]

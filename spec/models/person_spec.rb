@@ -47,7 +47,7 @@ describe Person do
     expect(Company.where(:name => "Acme").count).to eq(1)
 
     person.company_name = "New Co"
-    expect(Company.find_by_name("New Co")).to be_present
+    expect(Company.find_by(name: "New Co")).to be_present
   end
 
   def build_person(attrs = {})

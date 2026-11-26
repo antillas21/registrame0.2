@@ -39,7 +39,7 @@ class Person < ActiveRecord::Base
   end
 
   def company_name=(name)
-    self.company = Company.find_or_create_by_name(name) unless name.blank?
+    self.company = Company.find_or_create_by(name: name) unless name.blank?
   end
 
   def profile(options = {})

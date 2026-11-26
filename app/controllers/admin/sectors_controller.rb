@@ -1,5 +1,5 @@
 class Admin::SectorsController < Admin::BaseController
-  before_filter :find_sector, :only => [:show, :edit, :update, :destroy]
+  before_action :find_sector, :only => [:show, :edit, :update, :destroy]
 
   def index
     @sectors = Sector.all
@@ -10,7 +10,7 @@ class Admin::SectorsController < Admin::BaseController
   end
 
   def create
-    @sector = Sector.new(params[:sector])
+    @sector = Sector.new(sector_params)
     if @sector.save
       redirect_to admin_sectors_path, :notice => "Added new sector."
     else
@@ -28,7 +28,7 @@ class Admin::SectorsController < Admin::BaseController
   end
 
   def update
-    if @sector.update_attributes(params[:sector])
+    if @sector.update_attributes(sector_params)
       redirect_to admin_sectors_path, :notice => "Sector has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
@@ -44,5 +44,8 @@ class Admin::SectorsController < Admin::BaseController
   private
     def find_sector
       @sector = Sector.find(params[:id])
+    end
+    def sector_params
+      params.require(:sector).permit(:name)
     end
 end

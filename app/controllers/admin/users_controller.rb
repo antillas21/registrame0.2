@@ -1,5 +1,5 @@
 class Admin::UsersController < Admin::BaseController
-  before_filter :find_user, :only => [:edit, :update, :destroy]
+  before_action :find_user, :only => [:edit, :update, :destroy]
   def index
     @users = User.all
   end
@@ -9,7 +9,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create
-    @user = User.new(params[:user])
+    @user = User.new(user_params)
     if @user.save
       redirect_to admin_users_path, :notice => "User has been created."
     else
@@ -23,7 +23,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def update
-    if @user.update_attributes(params[:user])
+    if @user.update_attributes(user_params)
       redirect_to admin_users_path, :notice => "User has been updated."
     else
       flash[:error] = "User could not be updated."
@@ -44,5 +44,8 @@ class Admin::UsersController < Admin::BaseController
   private
     def find_user
       @user = User.find(params[:id])
+    end
+    def user_params
+      params.require(:user).permit(:username, :email, :password, :password_confirmation)
     end
 end

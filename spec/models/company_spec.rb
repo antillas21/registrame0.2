@@ -8,7 +8,7 @@ describe Company do
     expect(company.state).to eq(existing)
 
     company.state_name = "Nayarit"
-    expect(State.find_by_name("Nayarit")).to be_present
+    expect(State.find_by(name: "Nayarit")).to be_present
   end
 
   it "finds or creates a country by name" do
@@ -18,6 +18,6 @@ describe Company do
     expect(company.country).to eq(existing)
 
     company.country_name = "Canada"
-    expect(Country.find_by_name("Canada")).to be_present
+    expect(Country.find_by(name: "Canada")).to be_present
   end
 end

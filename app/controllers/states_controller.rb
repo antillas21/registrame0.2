@@ -4,9 +4,9 @@ class StatesController < ApplicationController
   end
 
   def create
-    #@state = State.new(params[:state])
+    #@state = State.new(state_params)
     #@state.save
-    @state = State.create!(params[:state])
+    @state = State.create!(state_params)
   end
 
   def index
@@ -16,5 +16,8 @@ class StatesController < ApplicationController
     end
   end
 
+  private
+    def state_params
+      params.require(:state).permit(:name)
+    end
 end
-

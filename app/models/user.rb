@@ -3,11 +3,9 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable, :registerable, :rememberable,
   devise :database_authenticatable, :recoverable, :trackable, :validatable
 
-  # Setup accessible (or protected) attributes for your model, :remember_me
-  attr_accessible :email, :password, :password_confirmation, :username
   attr_accessor :login
 
-  default_scope order("email")
+  default_scope { order("email") }
 
   def to_s
     if self.admin?

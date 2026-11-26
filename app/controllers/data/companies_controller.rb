@@ -1,5 +1,5 @@
 class Data::CompaniesController < Data::BaseController
-  before_filter :find_company, :only => [:show, :edit, :update, :destroy, :people]
+  before_action :find_company, :only => [:show, :edit, :update, :destroy, :people]
 
   def index
     @companies = Company.where('name ILIKE ?', "%#{params[:search]}%")
@@ -15,7 +15,7 @@ class Data::CompaniesController < Data::BaseController
   end
 
   def create
-    @company = Company.new(params[:company])
+    @company = Company.new(company_params)
     if @company.save
       redirect_to data_company_path(@company), :notice => "Added new company."
     else
@@ -37,7 +37,7 @@ class Data::CompaniesController < Data::BaseController
   end
 
   def update
-    if @company.update_attributes(params[:company])
+    if @company.update_attributes(company_params)
       redirect_to data_company_path(@company), :notice => "Company has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
@@ -64,5 +64,10 @@ class Data::CompaniesController < Data::BaseController
   private
     def find_company
       @company = Company.find(params[:id])
+    end
+    def company_params
+      params.require(:company).permit(
+        :name, :address1, :address2, :city, :state_name, :country_name, :sector_id
+      )
     end
 end
