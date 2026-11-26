@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include NameBadgeRendering
   protect_from_forgery
 
   private

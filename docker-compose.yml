@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: registrame
+      POSTGRES_PASSWORD: registrame
+      POSTGRES_DB: registrame_development
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - pgdata:/var/lib/postgresql
+  web:
+    build: .
+    platform: linux/amd64
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    entrypoint: ["bash", "/app/docker/entrypoint.sh"]
+    command: ["bundle", "exec", "rails", "server", "-p", "3000"]
+    environment:
+      POSTGRES_HOST: db
+      SECRET_TOKEN: development-secret-token-change-me-0123456789
+      RAILS_ENV: development
+
+volumes:
+  pgdata:

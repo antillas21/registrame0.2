@@ -9,7 +9,7 @@ class PagesController < ApplicationController
   end
 
   def companytable
-    @companies = Company.where('name LIKE ?', "%#{params[:sSearch]}%"
+    @companies = Company.where('name ILIKE ?', "%#{params[:sSearch]}%"
     ).order(
       "#{companytable_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "ASC"}"
     ).limit(
@@ -18,7 +18,7 @@ class PagesController < ApplicationController
       params[:iDisplayStart].to_i
     )
     @iTotalRecords = Company.count
-    @iTotalDisplayRecords = Company.where('name LIKE ?', "%#{params[:sSearch]}%").count
+    @iTotalDisplayRecords = Company.where('name ILIKE ?', "%#{params[:sSearch]}%").count
     @sEcho = params[:sEcho].to_i
     render :layout => false
   end
@@ -32,7 +32,7 @@ class PagesController < ApplicationController
 
   def peopletable
     @people = Person.where(
-      'lname LIKE ?', "%#{params[:sSearch]}%"
+      'lname ILIKE ?', "%#{params[:sSearch]}%"
     ).order(
       "#{people_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "ASC"}"
     ).limit(
@@ -41,7 +41,7 @@ class PagesController < ApplicationController
       params[:iDisplayStart].to_i
     )
     @iTotalRecords = Person.count
-    @iTotalDisplayRecords = Person.where('lname LIKE ?', "%#{params[:sSearch]}%").count
+    @iTotalDisplayRecords = Person.where('lname ILIKE ?', "%#{params[:sSearch]}%").count
     @sEcho = params[:sEcho].to_i
     render :layout => false
   end
@@ -56,7 +56,7 @@ class PagesController < ApplicationController
   end
 
   def reporting
-    @people = Person.where('lname LIKE ?', "%#{params[:sSearch]}%").includes(
+    @people = Person.where('lname ILIKE ?', "%#{params[:sSearch]}%").includes(
       {:company => [:state, :country, :sector]}, :registration, :interests, :promotions
       ).order(
           "#{reporting_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "ASC"}"
@@ -64,7 +64,7 @@ class PagesController < ApplicationController
         params[:iDisplayLength]
       ).offset(params[:iDisplayStart])
     @iTotalRecords = Person.count
-    @iTotalDisplayRecords = Person.where('lname LIKE ?', "%#{params[:sSearch]}%").count
+    @iTotalDisplayRecords = Person.where('lname ILIKE ?', "%#{params[:sSearch]}%").count
     @sEcho = params[:sEcho].to_i
     render :layout => false
   end

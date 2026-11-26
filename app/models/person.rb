@@ -24,7 +24,7 @@ class Person < ActiveRecord::Base
     template.add :promotions
   end
 
-  scope :attended, where("printed = ?", true)
+  scope :attended, lambda { where("printed = ?", true) }
   delegate :name, :to => :registration, :prefix => true
   delegate :name, :address1, :city, :to => :company, :prefix => true
   delegate :name, :to => :promotions, :prefix => true

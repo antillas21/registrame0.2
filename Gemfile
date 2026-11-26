@@ -1,52 +1,28 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'rails', '3.0.7'
-gem 'sqlite3-ruby', :require => 'sqlite3'
+ruby '2.3.8'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'rails', '3.2.22.5'
+gem 'rake', '10.5.0'
+gem 'pg', '~> 0.21.0'
 
-gem 'yaml_db'
-
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-# gem 'ruby-debug'
-# gem 'ruby-debug19'
-
-# Bundle the extra gems:
-# gem 'bj'
-# gem 'nokogiri'
-# gem 'sqlite3-ruby', :require => 'sqlite3'
-# gem 'aws-s3', :require => 'aws/s3'
-gem 'jquery-rails'
-gem 'formtastic', '~> 1.2.3'
+gem 'jquery-rails', '~> 2.3.0'
+gem 'formtastic', '~> 2.2.1'
 gem 'dynamic_form'
-gem 'acts_as_api'
-gem 'client_side_validations'
+gem 'acts_as_api', '~> 0.4.2'
+gem 'client_side_validations', '~> 3.2.0'
+gem 'client_side_validations-formtastic', '~> 2.2.0'
 
-gem 'devise'
-gem 'rqr'
-gem 'prawn', '0.8.4'
+gem 'devise', '~> 2.2.8'
+gem 'rqrcode', '~> 0.10.1'
+gem 'chunky_png', '~> 1.3.0'
+gem 'prawn', '~> 1.3.0'
 
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
+group :assets do
+  gem 'sass-rails', '~> 3.2.6'
+end
+
 group :development, :test do
-  gem 'rspec-rails'
-  gem 'cucumber-rails'
-  gem 'capybara'
-  gem 'factory_girl'
-end
-
-group :development do
-  gem 'capistrano'
-end
-
-group :production do
-  gem 'mysql2', '0.2.7'
+  gem 'rspec-rails', '~> 2.14.0'
+  gem 'test-unit', '~> 3.3.0'
 end

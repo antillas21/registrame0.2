@@ -30,7 +30,10 @@ class PeopleController < ApplicationController
       format.html
       format.xml { render_for_api :complete_record, :xml => @person }
       format.json { render_for_api :complete_record, :json => @person }
-      format.pdf { printed }
+      format.pdf do
+        mark_printed(@person)
+        send_badge(@person)
+      end
     end
   end
 
