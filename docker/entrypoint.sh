@@ -2,7 +2,7 @@
 set -e
 
 host="${POSTGRES_HOST:-db}"
-until pg_isready -h "$host" -U registrame >/dev/null 2>&1; do
+until (echo >/dev/tcp/"${host}"/5432) >/dev/null 2>&1; do
   echo "waiting for postgres at ${host}"
   sleep 1
 done

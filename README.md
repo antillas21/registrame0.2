@@ -4,7 +4,7 @@ Event registration for an expo or trade show. The app has three areas: admin con
 
 ## Setup
 
-Local development runs in Docker Compose. The web container is `ruby:3.3.14` and the app server is Puma. The database container is `postgres:18-alpine`. Dev connections use `scram-sha-256`.
+Local development runs in Docker Compose. Compose builds the `dev` stage: `ruby:3.4.13-slim` plus the compiler packages, so a later `bundle install` can compile native gems. The runtime stage is that slim image with `libpq5` only, runs as the `rails` user, and has no compiler. The app server is Puma. The database container is `postgres:18-alpine`. Dev connections use `scram-sha-256`.
 
 ```sh
 docker compose up --build
@@ -27,7 +27,7 @@ That command uses the `registrame_test` database on Postgres 18. It must exit 0.
 
 ## Architecture
 
-The web container and the Postgres 18 container are separate. Compose publishes port 3000 and keeps Postgres data on a named volume mounted at `/var/lib/postgresql` (the Postgres 18 image layout).
+The web container and the Postgres 18 container are separate. Compose publishes port 3000 and keeps Postgres data on a named volume mounted at `/var/lib/postgresql` (the Postgres 18 image layout). Local Compose uses the `dev` image stage. The runtime stage has no compiler.
 
 - **Public** (`/`, `/people`) lets someone pre-register. A confirmation email goes out when the record saves.
 - **Data** (`/data`) is for staff at the event: attendee lists, company search, and name-badge printing. Sign-in is required.
@@ -41,24 +41,32 @@ A name badge PDF is rendered when a signed-in user requests `/data/people/:id.pd
 
 | | |
 | --- | --- |
-| Ruby | 3.3.14 |
-| Rails | 7.2.4 |
+| Ruby | 3.4.13 |
+| Rails | 8.1.4.1 |
 | PostgreSQL | 18 |
-| Puma | `~> 6.4` |
-| Devise | `~> 4.9.0` |
+| Puma | `~> 8.1.3` |
+| Devise | `~> 5.0.4` |
 | Formtastic | `~> 5.0.0` |
 | Prawn | `~> 2.5` |
 | rqrcode | `~> 2.0` |
 | chunky_png | `~> 1.4` |
 | pg | `~> 1.5` |
-| bootsnap | `>= 1.16.0` |
-| rspec-rails | `~> 6.1.0` |
+| bootsnap | `>= 1.18.0` |
+| rspec-rails | `~> 8.1.0` |
 | jquery-rails | `~> 4.6.0` |
 | sprockets-rails | `~> 3.4` |
 
 Search uses `ILIKE` so company and attendee name search stays case-insensitive on Postgres. Create and update actions permit their own parameters. Data JSON is built in the models. Styles and scripts stay on Sprockets. `consolidated.css` is plain CSS, so the app does not run it through a Sass compiler.
 
 ## Decisions
+
+### 2026-11-25 — `upgrade/rails-8-1` — Rails 8.1.4.1 / Ruby 3.4.13
+
+`config.load_defaults` was booted at 8.0, then 8.1. The suite stayed green on each group. `rails app:update` kept the existing config. Propshaft, Solid Queue, Solid Cache, Solid Cable, Thruster, and Kamal are not part of this app. Sprockets still serves the stylesheets and scripts, and `jquery-ujs` still handles `method: :delete`. The generated CI script audits importmap and runs minitest, so it was not kept.
+
+Devise 4.9 and Formtastic 5 both load on Rails 8, and the six `semantic_form_for` forms stay. `bundler-audit` reported Devise 4.9.4 and Puma 6.6.1, so this branch uses Devise 5.0.4 and Puma 8.1.3. A fresh audit reports no vulnerabilities. The lock no longer contains Rails 3 or Ruby 1.8.
+
+The Dockerfile is multi-stage. Gems are compiled in the build stage. The runtime stage is `ruby:3.4.13-slim` with `libpq5`, runs as the `rails` user, and has no compiler. Compose builds the `dev` stage, which adds the compiler packages for later native-gem installs. The entrypoint waits for Postgres with a TCP connection, so the runtime image does not install the Postgres client. `config/boot.rb` loads `logger` after Bundler, because Ruby 3.4 supplies it as a bundled gem.
 
 ### 2026-11-25 — `upgrade/rails-7-2` — Rails 7.2.4 / Ruby 3.3.14
 

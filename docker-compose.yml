@@ -9,7 +9,9 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql
   web:
-    build: .
+    build:
+      context: .
+      target: dev
     volumes:
       - .:/app
     ports:
