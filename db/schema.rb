@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2011_04_21_164631) do
-
+ActiveRecord::Schema[7.2].define(version: 2026_11_26_045333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,8 +19,8 @@ ActiveRecord::Schema.define(version: 2011_04_21_164631) do
     t.string "address1"
     t.string "address2"
     t.string "city"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "state_id"
     t.integer "country_id"
     t.integer "sector_id"
@@ -34,8 +33,8 @@ ActiveRecord::Schema.define(version: 2011_04_21_164631) do
 
   create_table "countries", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["name"], name: "index_countries_on_name"
   end
 
@@ -44,22 +43,22 @@ ActiveRecord::Schema.define(version: 2011_04_21_164631) do
     t.string "venue"
     t.text "info"
     t.date "date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "website"
   end
 
   create_table "interests", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "interests_people", id: false, force: :cascade do |t|
     t.integer "person_id"
     t.integer "interest_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["interest_id"], name: "index_interests_people_on_interest_id"
     t.index ["person_id"], name: "index_interests_people_on_person_id"
   end
@@ -72,8 +71,8 @@ ActiveRecord::Schema.define(version: 2011_04_21_164631) do
     t.float "right"
     t.float "top"
     t.float "bottom"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "font_size"
     t.index ["name"], name: "index_name_badges_on_name"
   end
@@ -83,8 +82,8 @@ ActiveRecord::Schema.define(version: 2011_04_21_164631) do
     t.string "lname"
     t.string "email"
     t.string "job"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "registration_id"
     t.integer "company_id"
     t.string "phone"
@@ -104,27 +103,27 @@ ActiveRecord::Schema.define(version: 2011_04_21_164631) do
 
   create_table "promotions", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "registrations", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "sectors", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["name"], name: "index_sectors_on_name", unique: true
   end
 
   create_table "states", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["name"], name: "index_states_on_name"
   end
 
@@ -132,18 +131,17 @@ ActiveRecord::Schema.define(version: 2011_04_21_164631) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", limit: 128, default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
+    t.datetime "reset_password_sent_at", precision: nil
     t.integer "sign_in_count", default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "admin", default: false
     t.string "username"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
-
 end

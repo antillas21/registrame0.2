@@ -4,7 +4,7 @@ Event registration for an expo or trade show. The app has three areas: admin con
 
 ## Setup
 
-Local development runs in Docker Compose. The web container is `ruby:3.0.7` and the app server is Puma. The database container is `postgres:18-alpine`. Dev connections use `scram-sha-256`.
+Local development runs in Docker Compose. The web container is `ruby:3.3.14` and the app server is Puma. The database container is `postgres:18-alpine`. Dev connections use `scram-sha-256`.
 
 ```sh
 docker compose up --build
@@ -15,7 +15,7 @@ The app listens on [http://localhost:3000](http://localhost:3000).
 
 `db:seed` creates an admin user and a demo event and name badge. Sign in with username `admin` and password `password` (email `admin@example.com` also works). Change that password before exposing the app. Running `db:seed` again inserts another event and another name badge; run it once on a fresh database.
 
-`config/app_config.yml` is optional. When it is missing, the app reads `config/sample_app_config.yml`. Set `SECRET_KEY_BASE` to a string of at least 30 characters in production. Compose sets one for development.
+`config/app_config.yml` is optional. When it is missing, boot copies `config/sample_app_config.yml` and loads it with `Rails.application.config_for`. SMTP settings come from `MAIL_SERVER`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_AUTH`, `MAIL_STARTTLS`, and `MAIL_DOMAIN` when those are set; otherwise they fall back to the YAML file. Compose sets the development mail values and `SECRET_KEY_BASE`. The encryption key for `config/credentials.yml.enc` stays in `config/master.key`, which is not committed. Set `SECRET_KEY_BASE` to a string of at least 30 characters in production.
 
 The characterization suite is the check for this branch:
 
@@ -41,24 +41,32 @@ A name badge PDF is rendered when a signed-in user requests `/data/people/:id.pd
 
 | | |
 | --- | --- |
-| Ruby | 3.0.7 |
-| Rails | 6.1.7.10 |
+| Ruby | 3.3.14 |
+| Rails | 7.2.4 |
 | PostgreSQL | 18 |
-| Puma | `~> 5.6` |
-| Devise | `~> 4.8.0` |
+| Puma | `~> 6.4` |
+| Devise | `~> 4.9.0` |
 | Formtastic | `~> 5.0.0` |
-| Prawn | `~> 2.4` |
+| Prawn | `~> 2.5` |
 | rqrcode | `~> 2.0` |
-| chunky_png | `~> 1.3.0` |
-| pg | `~> 1.2` |
-| bootsnap | `>= 1.4.4` |
-| rspec-rails | `~> 5.0.0` |
-| jquery-rails | `~> 4.4.0` |
+| chunky_png | `~> 1.4` |
+| pg | `~> 1.5` |
+| bootsnap | `>= 1.16.0` |
+| rspec-rails | `~> 6.1.0` |
+| jquery-rails | `~> 4.6.0` |
 | sprockets-rails | `~> 3.4` |
 
 Search uses `ILIKE` so company and attendee name search stays case-insensitive on Postgres. Create and update actions permit their own parameters. Data JSON is built in the models. Styles and scripts stay on Sprockets. `consolidated.css` is plain CSS, so the app does not run it through a Sass compiler.
 
 ## Decisions
+
+### 2026-11-25 — `upgrade/rails-7-2` — Rails 7.2.4 / Ruby 3.3.14
+
+`config.load_defaults` was booted at 7.0, then 7.1, then 7.2. The suite stayed green on each group. `rails app:update` kept the existing config files. It added the commented 7.2 framework defaults, a Puma config, and a commented permissions policy. Importmap, Turbo, and Stimulus were not added. Sprockets still serves the stylesheets and scripts, and `jquery-ujs` still handles `method: :delete`.
+
+App settings load with `Rails.application.config_for(:app_config)` before the environment files run. A missing `config/app_config.yml` is copied from the sample. Mail username, password, and SMTP settings prefer the `MAIL_*` environment variables, and Compose sets them for development. `config/secrets.yml` is gone. Tests set `secret_key_base` in the test environment. Development and production use `SECRET_KEY_BASE`. `config/credentials.yml.enc` is committed and `config/master.key` is not.
+
+The Rails 3.2 `client_min_messages` rewrite is gone. Rails 7.2 sets that level to `warning`, which Postgres 18 accepts. Devise is 4.9 and rspec-rails is 6.1. The image is `ruby:3.3.14` on current Debian, so the archive-mirror rewrite used for older Ruby images is not part of this Dockerfile.
 
 ### 2026-11-25 — `upgrade/rails-6-1` — Rails 6.1.7.10 / Ruby 3.0.7
 
