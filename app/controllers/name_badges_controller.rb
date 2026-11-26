@@ -13,7 +13,7 @@ class NameBadgesController < ApplicationController
 
   def update
 
-    if @name_badge.update_attributes(name_badge_params)
+    if @name_badge.update(name_badge_params)
       redirect_to name_badges_path, :notice => "Name badge has been updated."
     else
       flash[:alert] = "There were some errors. Please correct them before proceeding."

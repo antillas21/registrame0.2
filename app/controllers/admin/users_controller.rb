@@ -23,7 +23,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def update
-    if @user.update_attributes(user_params)
+    if @user.update(user_params)
       redirect_to admin_users_path, :notice => "User has been updated."
     else
       flash[:error] = "User could not be updated."

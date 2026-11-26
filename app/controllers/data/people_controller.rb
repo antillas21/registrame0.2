@@ -41,7 +41,7 @@ class Data::PeopleController < Data::BaseController
   end
 
   def update
-    if @person.update_attributes(person_params)
+    if @person.update(person_params)
       redirect_to data_person_path(@person), :notice => "Attendee has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."

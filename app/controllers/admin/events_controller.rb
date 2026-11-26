@@ -33,7 +33,7 @@ class Admin::EventsController < Admin::BaseController
   end
 
   def update
-    if @event.update_attributes(event_params)
+    if @event.update(event_params)
       redirect_to admin_events_path, :notice => "Event info has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."

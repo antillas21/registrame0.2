@@ -28,7 +28,7 @@ class Admin::RegistrationsController < Admin::BaseController
   end
 
   def update
-    if @registration.update_attributes(registration_params)
+    if @registration.update(registration_params)
       redirect_to admin_registrations_path, :notice => "Registration type has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."

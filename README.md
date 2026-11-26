@@ -4,7 +4,7 @@ Event registration for an expo or trade show. The app has three areas: admin con
 
 ## Setup
 
-Local development runs in Docker Compose. The web container is `ruby:2.6.10`. The database container is `postgres:18-alpine`. Dev connections use `scram-sha-256`.
+Local development runs in Docker Compose. The web container is `ruby:3.0.7` and the app server is Puma. The database container is `postgres:18-alpine`. Dev connections use `scram-sha-256`.
 
 ```sh
 docker compose up --build
@@ -41,24 +41,28 @@ A name badge PDF is rendered when a signed-in user requests `/data/people/:id.pd
 
 | | |
 | --- | --- |
-| Ruby | 2.6.10 |
-| Rails | 5.2.8.1 |
+| Ruby | 3.0.7 |
+| Rails | 6.1.7.10 |
 | PostgreSQL | 18 |
-| Devise | `~> 4.7.0` |
-| Formtastic | `~> 3.1.0` |
+| Puma | `~> 5.6` |
+| Devise | `~> 4.8.0` |
+| Formtastic | `~> 5.0.0` |
 | Prawn | `~> 2.4` |
-| rqrcode | `~> 0.10.1` |
+| rqrcode | `~> 2.0` |
 | chunky_png | `~> 1.3.0` |
-| pg | `~> 1.1` |
-| bootsnap | `>= 1.1.0` |
-| rspec-rails | `~> 3.8.0` |
-| jquery-rails | `~> 4.3.1` |
-| sass-rails | `~> 5.0.6` |
-| ffi | `1.15.5` |
+| pg | `~> 1.2` |
+| bootsnap | `>= 1.4.4` |
+| rspec-rails | `~> 5.0.0` |
+| jquery-rails | `~> 4.4.0` |
+| sprockets-rails | `~> 3.4` |
 
-Search uses `ILIKE` so company and attendee name search stays case-insensitive on Postgres. Create and update actions permit their own parameters. `client_side_validations` and `acts_as_api` are gone. Data JSON is built in the models.
+Search uses `ILIKE` so company and attendee name search stays case-insensitive on Postgres. Create and update actions permit their own parameters. Data JSON is built in the models. Styles and scripts stay on Sprockets. `consolidated.css` is plain CSS, so the app does not run it through a Sass compiler.
 
 ## Decisions
+
+### 2026-11-25 — `upgrade/rails-6-1` — Rails 6.1.7.10 / Ruby 3.0.7
+
+`config.load_defaults 6.1` turns on Zeitwerk. `rails zeitwerk:check` eager-loads the app. `update_attributes` is now `update`. Devise is 4.8, Formtastic is 5, and `rqrcode` is 2.x. Puma replaces WEBrick, which Ruby 3.0 no longer ships. `config/boot.rb` loads `logger` because current `concurrent-ruby` no longer does, and Rails 6.1 expects that constant. Sprockets needs `app/assets/config/manifest.js`. The vendored stylesheet is not valid Sass, so `sass-rails` is not installed and `sprockets-rails` serves the existing CSS and JavaScript.
 
 ### 2026-11-25 — `upgrade/rails-5-2` — Rails 5.2.8.1 / Ruby 2.6.10
 

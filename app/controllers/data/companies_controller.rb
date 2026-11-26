@@ -37,7 +37,7 @@ class Data::CompaniesController < Data::BaseController
   end
 
   def update
-    if @company.update_attributes(company_params)
+    if @company.update(company_params)
       redirect_to data_company_path(@company), :notice => "Company has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."

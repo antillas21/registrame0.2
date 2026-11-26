@@ -38,7 +38,7 @@ class PeopleController < ApplicationController
   end
 
   def update
-    if @person.update_attributes(person_params)
+    if @person.update(person_params)
       redirect_to @person, :notice => "Thank you for updating your record."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."

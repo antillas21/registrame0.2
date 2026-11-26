@@ -1,6 +1,6 @@
-FROM ruby:2.6.10
+FROM ruby:3.0.7
 
-# Ruby 2.6.10 is Debian Buster. Those mirrors moved to the archive.
+# Ruby 3.0.7 is Debian Bullseye. Those mirrors moved to the archive.
 RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
  && sed -i 's|security.debian.org/debian-security|archive.debian.org/debian-security|g' /etc/apt/sources.list \
  && sed -i '/-updates/d' /etc/apt/sources.list \
@@ -12,9 +12,9 @@ RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
 WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
-RUN gem install bundler -v 1.17.3 \
- && bundle _1.17.3_ config set force_ruby_platform true \
- && bundle _1.17.3_ install
+RUN gem install bundler -v 2.4.22 \
+ && bundle _2.4.22_ config set force_ruby_platform true \
+ && bundle _2.4.22_ install
 
 COPY . .
 

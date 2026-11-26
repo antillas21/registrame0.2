@@ -33,7 +33,7 @@ class Admin::PromotionsController < Admin::BaseController
   end
 
   def update
-    if @promotion.update_attributes(promotion_params)
+    if @promotion.update(promotion_params)
       redirect_to admin_promotions_path, :notice => "Promotion media has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."

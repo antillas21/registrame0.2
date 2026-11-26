@@ -28,7 +28,7 @@ class Admin::SectorsController < Admin::BaseController
   end
 
   def update
-    if @sector.update_attributes(sector_params)
+    if @sector.update(sector_params)
       redirect_to admin_sectors_path, :notice => "Sector has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."

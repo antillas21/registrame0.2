@@ -37,7 +37,7 @@ class CompaniesController < ApplicationController
   end
 
   def update
-    if @company.update_attributes(company_params)
+    if @company.update(company_params)
       redirect_to person_path(session[:person_id]), :notice => "Thank you for updating your company record. <strong>This step completes your registration</strong>".html_safe
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."

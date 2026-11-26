@@ -1,0 +1,12 @@
+//= link consolidated.css
+//= link print.css
+//= link ie.css
+//= link consolidated.min.js
+//= link jquery.min.js
+//= link rails.js
+//= link jquery-ui.js
+//= link ZeroClipboard.js
+//= link application.min.js
+//= link application.js
+//= link datacapture.jpg
+//= link registrame-logo.png

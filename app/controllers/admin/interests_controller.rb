@@ -33,7 +33,7 @@ class Admin::InterestsController < Admin::BaseController
   end
 
   def update
-    if @interest.update_attributes(interest_params)
+    if @interest.update(interest_params)
       redirect_to admin_interests_path, :notice => "Interest has been updated."
     else
       flash[:error] = "There were some errors. Please correct them before proceeding."
